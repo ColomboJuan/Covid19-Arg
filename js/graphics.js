@@ -77,34 +77,52 @@ var layout3 = {
 var layout4 = {
   title:'Grafico casos importados vs casos trasmisión comunitaria '
 };
+var config = {responsive: true}
 
-var data = [Confirmados, Activos,CasosRecuperados,CasosMuertes];
-var data2 = [TestConfirmados, TestsTotales];
-var data3 = [CasosRecuperados, CasosMuertes];
-var data4 = [CasosImportados, CasosTrasmisionComunitaria];
+var data = [Confirmados, Activos,CasosRecuperados,CasosMuertes,config];
+var data2 = [TestConfirmados, TestsTotales,config];
+var data3 = [CasosRecuperados, CasosMuertes,config];
+var data4 = [CasosImportados, CasosTrasmisionComunitaria,config];
 
 Plotly.newPlot('plot', data, layout);
 
 
 }
 
- function getData() {
+function getData() {
   fetch("https://damianra.pythonanywhere.com/api/v1/alldata")
-    .then(response => response.json())
-    .then(data => {
-        console.log(data)
+  .then(response => response.json())
+  .then(function(data){
+    console.log(data)
+    if (data["data"]){
+      return data;
+    }else{
+      getData();
+    }
+  })
+  .then(data => {
+      console.log(data)
       data["data"].forEach(({date,cases,deaths,recovered,tests,communityTransmission,imported}) => {
-        xCasesConfirmed.push(cases)
-        xCasesDeaths.push(deaths)
-        xCasesRecovered.push(recovered)
-        xActives.push(cases - deaths- recovered)
-        xLabels.push(date)
-        xTests.push(tests)
-        xImported.push(imported)
-        xCommunityTransmission.push(communityTransmission)
-      });
-
-      plotly()
+      xCasesConfirmed.push(cases)
+      xCasesDeaths.push(deaths)
+      xCasesRecovered.push(recovered)
+      xActives.push(cases - deaths- recovered)
+      xLabels.push(date)
+      xTests.push(tests)
+      xImported.push(imported)
+      xCommunityTransmission.push(communityTransmission)
+  
     });
 
+    
+  
+    plotly()
+    SetData(xCasesConfirmed[xCasesConfirmed.length-1],xCasesDeaths[xCasesDeaths.length-1],xCasesRecovered[xCasesRecovered.length-1],xActives[xActives.length-1])
+  });
+  function SetData(confirmed, deaths, recovered, actives) {
+    document.getElementById('confirmedLast').textContent = confirmed
+    document.getElementById('deathsLast').textContent = deaths
+    document.getElementById('recoveredLast').textContent = recovered
+    document.getElementById('activesLast').textContent = actives
+  }
   }
