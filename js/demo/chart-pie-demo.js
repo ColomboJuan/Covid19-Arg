@@ -43,7 +43,7 @@ var myPieChart = new Chart(ctx, {
 
 }
 function getData() {
-  fetch("http://damianra.pythonanywhere.com/api/v1/ult-actualization")
+  fetch("https://damianra.pythonanywhere.com/api/v1/ult-actualization")
     .then(response => response.json())
     .then(data => {
        lastConfirmed = data.data.casos;
