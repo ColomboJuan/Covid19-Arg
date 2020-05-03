@@ -1,7 +1,7 @@
 getData();
 
 function getData() {
-  fetch("http://damianra.pythonanywhere.com/api/v1/ult-actualization")
+  fetch("https://damianra.pythonanywhere.com/api/v1/ult-actualization")
     .then(response => response.json())
     .then(data => {
       var lastConfirmed = data.data.casos;
