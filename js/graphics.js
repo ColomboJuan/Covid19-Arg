@@ -89,7 +89,7 @@ Plotly.newPlot('plot', data, layout);
 }
 
  function getData() {
-  fetch("http://damianra.pythonanywhere.com/api/v1/alldata")
+  fetch("https://damianra.pythonanywhere.com/api/v1/alldata")
     .then(response => response.json())
     .then(data => {
         console.log(data)
