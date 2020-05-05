@@ -125,6 +125,15 @@ fetch("https://damianra.pythonanywhere.com/api/v1/alldata")
   });
 
   plotly()
-});
+  SetData(xCasesConfirmed[xCasesConfirmed.length-1],xCasesDeaths[xCasesDeaths.length-1],xCasesRecovered[xCasesRecovered.length-1],xActives[xActives.length-1])
 
+});
+function SetData(confirmed, deaths, recovered, actives) {
+  document.getElementById('confirmedLast').textContent = confirmed
+  document.getElementById('deathsLast').textContent = deaths
+  document.getElementById('recoveredLast').textContent = recovered
+  document.getElementById('activesLast').textContent = actives
 }
+}
+
+
