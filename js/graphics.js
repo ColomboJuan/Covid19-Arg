@@ -6,6 +6,10 @@ let xActives = []
 let xCommunityTransmission =[]
 let xImported =[]
 let xTests = []
+let lastConfirmed;
+let lastDeaths;
+let lastRecovered;
+let lastActives;
 
 getData()
 
@@ -47,7 +51,7 @@ var TestsTotales = {
 var CasosRecuperados = {
   x: xLabels,
   y: xCasesRecovered,
-  mode: 'lines+markers',
+  mode: 'lines  ',
   name: 'Recuperados'
 };
 
@@ -84,9 +88,7 @@ var CasosTrasmisionComunitaria = {
   name: 'Casos trasmisión coomunitaria'
 };
 
-var layout = {
-  title:''
-};
+
 var layout2 = {
   title:'Grafico tests positivos vs tests totales'
 };
@@ -102,10 +104,46 @@ var data2 = [TestConfirmados, TestsTotales];
 var data3 = [CasosRecuperados, CasosMuertes];
 var data4 = [CasosImportados, CasosTrasmisionComunitaria];
 
-Plotly.newPlot('plot', data, layout);
+Plotly.newPlot('plot', data);
 
 
 }
+
+function charPor(){
+
+  var ctx = document.getElementById("myPieChart");
+  
+  var myPieChart = new Chart(ctx, {
+    
+    type: 'doughnut',
+    data: {
+      labels: ["Confirmados", "Muertes", "Recuperados"],
+      datasets: [{
+        data: [lastConfirmed, lastDeaths, lastRecovered],
+        backgroundColor: ['#36b9cc', '#e74a3b', '#1cc88a'],
+        hoverBorderColor: "rgba(234, 236, 244, 1)",
+      }],
+    },
+    options: {
+      maintainAspectRatio: false,
+      tooltips: {
+        backgroundColor: "rgb(255,255,255)",
+        bodyFontColor: "#858796",
+        borderColor: '#dddfeb',
+        borderWidth: 1,
+        xPadding: 15,
+        yPadding: 15,
+        displayColors: false,
+        caretPadding: 10,
+      },
+      legend: {
+        display: false
+      },
+      cutoutPercentage: 80,
+    },
+  });
+  
+  }
 
 function getData() {
 fetch("https://damianra.pythonanywhere.com/api/v1/alldata")
@@ -123,9 +161,13 @@ fetch("https://damianra.pythonanywhere.com/api/v1/alldata")
     xCommunityTransmission.push(communityTransmission)
 
   });
-
+    lastConfirmed =xCasesConfirmed[xCasesConfirmed.length-1]
+    lastDeaths = xCasesDeaths[xCasesDeaths.length-1]
+    lastRecovered = xCasesRecovered[xCasesRecovered.length-1],xActives[xActives.length-1]
+    lastActives = xActives[xActives.length-1]
   plotly()
-  SetData(xCasesConfirmed[xCasesConfirmed.length-1],xCasesDeaths[xCasesDeaths.length-1],xCasesRecovered[xCasesRecovered.length-1],xActives[xActives.length-1])
+  SetData(lastConfirmed,lastDeaths,lastRecovered,lastActives)
+  charPor()
 
 });
 function SetData(confirmed, deaths, recovered, actives) {
